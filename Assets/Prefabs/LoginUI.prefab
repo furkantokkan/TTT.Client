@@ -505,6 +505,9 @@ MonoBehaviour:
   loginText: {fileID: 6943724565039883915}
   usernameInputfield: {fileID: 6943724564035016296}
   passwordInputfield: {fileID: 6943724563654212382}
+  loginButtonError: {fileID: 6943724564783418462}
+  usernameError: {fileID: 6943724565121229546}
+  passwordError: {fileID: 6943724564707531849}
 --- !u!1 &6943724564035016294
 GameObject:
   m_ObjectHideFlags: 0

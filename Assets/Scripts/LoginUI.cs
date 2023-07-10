@@ -17,6 +17,9 @@ public class LoginUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI loginText;
     [SerializeField] private TMP_InputField usernameInputfield;
     [SerializeField] private TMP_InputField passwordInputfield;
+    [SerializeField] private GameObject loginButtonError;
+    [SerializeField] private GameObject usernameError;
+    [SerializeField] private GameObject passwordError;
 
     private string username = string.Empty;
 
@@ -55,6 +58,18 @@ public class LoginUI : MonoBehaviour
             usernameRegex.Success;
 
         InteractLoginButton(interactable);
+
+        if (password != null)
+        {
+            bool passwordtooLong = password.Length > maxPasswordLength;
+            passwordError.gameObject.SetActive(passwordtooLong);
+        }
+        
+        if (username != null)
+        {
+            bool userNameNotValid = username.Length > maxUsernameLength || !usernameRegex.Success;
+            usernameError.gameObject.SetActive(userNameNotValid);
+        }
     }
 
     private void InteractLoginButton(bool interactable)
