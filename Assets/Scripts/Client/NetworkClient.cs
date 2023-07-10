@@ -1,5 +1,6 @@
 using LiteNetLib;
 using LiteNetLib.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
@@ -15,6 +16,9 @@ public class NetworkClient : MonoBehaviour, INetEventListener
     private NetDataWriter writer;
 
     private static NetworkClient intance;
+
+    public event Action onServerConnected;
+    public event Action onServerDisconnected;
 
     public static NetworkClient Instance
     {
@@ -61,10 +65,16 @@ public class NetworkClient : MonoBehaviour, INetEventListener
         netManager.Connect("localhost", 9050, "");
     }
 
-    public void SendServer(string data)
+    public void SendServer<T>(T packet, DeliveryMethod deliveryMethod = DeliveryMethod.ReliableSequenced) where T : INetSerializable
     {
-        var bytes = Encoding.UTF8.GetBytes(data);
-        server.Send(bytes, DeliveryMethod.ReliableOrdered);
+        if (server == null)
+        {
+            return;
+        }
+
+        writer.Reset();
+        packet.Serialize(writer);
+        server.Send(writer, deliveryMethod);
     }
 
     public void OnConnectionRequest(ConnectionRequest request)
@@ -97,11 +107,13 @@ public class NetworkClient : MonoBehaviour, INetEventListener
     {
         Debug.Log("<color=green>" + "On Peer Connected at " + peer.EndPoint + "</color>");
         server = peer;
+        onServerConnected?.Invoke();
     }
 
     public void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
     {
         Debug.Log("<color=red>" + "Disconnected from server, casuse is: " + disconnectInfo.Reason.ToString() + "</color>");
+        onServerDisconnected?.Invoke();
     }
 
 }

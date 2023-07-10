@@ -1,3 +1,4 @@
+using Networkshared.Packets.ClientServer;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LoginUI : MonoBehaviour
+public class LoginManager : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private int maxUsernameLength = 10;
@@ -35,6 +36,24 @@ public class LoginUI : MonoBehaviour
         usernameInputfield.onValueChanged.AddListener(UpdateUsername);
 
         passwordInputfield.onValueChanged.AddListener(UpdatePassword);
+
+        NetworkClient.Instance.onServerConnected += SetConnected;
+        NetworkClient.Instance.onServerDisconnected += SetDisconnected;
+    }
+    private void OnDisable()
+    {
+        NetworkClient.Instance.onServerConnected -= SetConnected;
+        NetworkClient.Instance.onServerDisconnected -= SetDisconnected;
+    }
+
+    private void SetConnected()
+    {
+        isConnected = true;
+    }
+
+    private void SetDisconnected()
+    {
+        isConnected = false;
     }
 
     private void UpdateUsername(string value)
@@ -66,7 +85,7 @@ public class LoginUI : MonoBehaviour
             bool passwordtooLong = password.Length > maxPasswordLength;
             passwordError.gameObject.SetActive(passwordtooLong);
         }
-        
+
         if (username != null)
         {
             bool userNameNotValid = username.Length > maxUsernameLength || !usernameRegex.Success;
@@ -99,5 +118,13 @@ public class LoginUI : MonoBehaviour
         {
             yield return null;
         }
+
+        var authRequest = new NetAuthRequest()
+        {
+            Username = username,
+            Password = password
+        };
+
+        NetworkClient.Instance.SendServer(authRequest);
     }
 }
