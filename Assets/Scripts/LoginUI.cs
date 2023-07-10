@@ -20,11 +20,13 @@ public class LoginUI : MonoBehaviour
     [SerializeField] private GameObject loginButtonError;
     [SerializeField] private GameObject usernameError;
     [SerializeField] private GameObject passwordError;
+    [SerializeField] private GameObject loadingAnimation;
 
     private string username = string.Empty;
 
     private string password = string.Empty;
 
+    private bool isConnected = false;
 
     private void Start()
     {
@@ -81,6 +83,21 @@ public class LoginUI : MonoBehaviour
 
     private void Login()
     {
+        StopCoroutine(LoginRoutine());
+        StartCoroutine(LoginRoutine());
         Debug.Log("Logining in!");
+    }
+
+    private IEnumerator LoginRoutine()
+    {
+        InteractLoginButton(false);
+        loadingAnimation.gameObject.SetActive(true);
+
+        NetworkClient.Instance.Connect();
+
+        while (!isConnected)
+        {
+            yield return null;
+        }
     }
 }

@@ -15,7 +15,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &31573653
 RectTransform:
   m_ObjectHideFlags: 0
@@ -818,6 +818,7 @@ MonoBehaviour:
   loginButtonError: {fileID: 6943724564783418462}
   usernameError: {fileID: 6943724565121229546}
   passwordError: {fileID: 6943724564707531849}
+  loadingAnimation: {fileID: 31573652}
 --- !u!1 &6943724564035016294
 GameObject:
   m_ObjectHideFlags: 0
