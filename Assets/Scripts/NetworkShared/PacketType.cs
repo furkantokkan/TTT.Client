@@ -1,7 +1,6 @@
 using LiteNetLib.Utils;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace NetworkShared
 {
@@ -13,7 +12,9 @@ namespace NetworkShared
         #endregion
 
         #region ServerClient
-        OnAuth = 100
+        OnAuth = 100,
+        OnAuthFail = 101,
+        OnServerStatus = 102
         #endregion
     }
 }

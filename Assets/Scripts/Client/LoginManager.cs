@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using TMPro;
+using TTT.Server.NetworkShared.Packets.ServerClient;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,13 +40,22 @@ public class LoginManager : MonoBehaviour
 
         NetworkClient.Instance.onServerConnected += SetConnected;
         NetworkClient.Instance.onServerDisconnected += SetDisconnected;
+
+        NetworkClient.Instance.onServerDisconnected += ResetButton;
+
+        OnAuthFailHandler.OnAuthFail += ShowLoginError;
     }
     private void OnDisable()
     {
         NetworkClient.Instance.onServerConnected -= SetConnected;
         NetworkClient.Instance.onServerDisconnected -= SetDisconnected;
+        NetworkClient.Instance.onServerDisconnected -= ResetButton;
+        OnAuthFailHandler.OnAuthFail -= ShowLoginError;
     }
-
+    public void QuitButton()
+    {
+        Application.Quit();
+    }
     private void SetConnected()
     {
         isConnected = true;
@@ -99,17 +109,28 @@ public class LoginManager : MonoBehaviour
         Color color = loginButton.interactable ? Color.white : Color.grey;
         loginText.color = color;
     }
-
+    private void ResetButton()
+    {
+        StopCoroutine(LoginRoutine());
+        InteractLoginButton(true);
+        loadingAnimation.gameObject.SetActive(false);
+    }
     private void Login()
     {
         StopCoroutine(LoginRoutine());
         StartCoroutine(LoginRoutine());
         Debug.Log("Logining in!");
     }
+    private void ShowLoginError(NetOnAuthFail fail)
+    {
+        ResetButton();
+        loginButtonError.gameObject.SetActive(true);
+    }
 
     private IEnumerator LoginRoutine()
     {
         InteractLoginButton(false);
+        loginButtonError.gameObject.SetActive(false);
         loadingAnimation.gameObject.SetActive(true);
 
         NetworkClient.Instance.Connect();

@@ -1,11 +1,14 @@
 using LiteNetLib;
 using LiteNetLib.Utils;
+using NetworkShared;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using TTT.Server.NetworkShared;
+using TTT.Server.NetworkShared.Registries;
 using UnityEngine;
 
 public class NetworkClient : MonoBehaviour, INetEventListener
@@ -14,6 +17,9 @@ public class NetworkClient : MonoBehaviour, INetEventListener
 
     private NetPeer server;
     private NetDataWriter writer;
+
+    private PacketRegistry packetRegistry;
+    private HandlerRegistry handlerRegistry;
 
     private static NetworkClient intance;
 
@@ -46,6 +52,8 @@ public class NetworkClient : MonoBehaviour, INetEventListener
 
     private void Initialzie()
     {
+        packetRegistry = new PacketRegistry();
+        handlerRegistry = new HandlerRegistry();
         writer = new NetDataWriter();
         netManager = new NetManager(this)
         {
@@ -94,8 +102,14 @@ public class NetworkClient : MonoBehaviour, INetEventListener
 
     public void OnNetworkReceive(NetPeer peer, NetPacketReader reader, byte channelNumber, DeliveryMethod deliveryMethod)
     {
-        var data = Encoding.UTF8.GetString(reader.RawData).Replace("\0", "");
-        Debug.Log("<color=green>" + "Data recived from sever: " + data + "</color>");
+        //var data = Encoding.UTF8.GetString(reader.RawData).Replace("\0", "");
+        var packetType = (PacketType)reader.GetByte();
+        var packet = ResolvePacket(packetType, reader);
+        var handler = ResolveHandler(packetType);
+        handler.Handle(packet, peer.Id);
+        Debug.Log("<color=green>" + "Data recived from sever: " + packet.Type.ToString() + "</color>");
+        reader.Recycle();
+
     }
 
     public void OnNetworkReceiveUnconnected(IPEndPoint remoteEndPoint, NetPacketReader reader, UnconnectedMessageType messageType)
@@ -115,5 +129,17 @@ public class NetworkClient : MonoBehaviour, INetEventListener
         Debug.Log("<color=red>" + "Disconnected from server, casuse is: " + disconnectInfo.Reason.ToString() + "</color>");
         onServerDisconnected?.Invoke();
     }
+    private INetPacket ResolvePacket(PacketType packetType, NetPacketReader reader)
+    {
+        Type type = packetRegistry.PacketTypes[packetType];
+        var packet = (INetPacket)Activator.CreateInstance(type);
+        packet.Deserialize(reader);
+        return packet;
 
+    }
+    private IPacketHandler ResolveHandler(PacketType packetType)
+    {
+        Type handlerType = handlerRegistry.Handlers[packetType];
+        return (IPacketHandler)Activator.CreateInstance(handlerType);
+    }
 }
