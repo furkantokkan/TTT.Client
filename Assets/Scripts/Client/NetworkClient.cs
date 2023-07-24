@@ -39,6 +39,7 @@ public class NetworkClient : MonoBehaviour, INetEventListener
         if (intance == null)
         {
             intance = this;
+            DontDestroyOnLoad(this);
         }
         else
         {
