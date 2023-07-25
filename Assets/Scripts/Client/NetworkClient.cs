@@ -68,6 +68,22 @@ public class NetworkClient : MonoBehaviour, INetEventListener
     {
         netManager.PollEvents();
     }
+    private void OnApplicationQuit()
+    {
+        DisconnectFromServer();
+    }
+    private void OnDestroy()
+    {
+        if (server != null)
+        {
+            netManager.Stop();
+        }    
+    }
+
+    private void DisconnectFromServer()
+    {
+        netManager.DisconnectAll();
+    }
 
     public void Connect()
     {
