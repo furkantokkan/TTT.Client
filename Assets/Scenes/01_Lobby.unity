@@ -400,6 +400,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 168501045}
     m_Modifications:
+    - target: {fileID: 769498965777065161, guid: 0777a932d69f6a345b0f644e50b38f46, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.1371994
+      objectReference: {fileID: 0}
+    - target: {fileID: 1731783346166551087, guid: 0777a932d69f6a345b0f644e50b38f46, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2438516866230306045, guid: 0777a932d69f6a345b0f644e50b38f46, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3705957070194379068, guid: 0777a932d69f6a345b0f644e50b38f46, type: 3}
       propertyPath: m_Name
       value: LobbyUI
@@ -487,6 +499,10 @@ PrefabInstance:
     - target: {fileID: 3705957070194379069, guid: 0777a932d69f6a345b0f644e50b38f46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3705957070857253747, guid: 0777a932d69f6a345b0f644e50b38f46, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0777a932d69f6a345b0f644e50b38f46, type: 3}
