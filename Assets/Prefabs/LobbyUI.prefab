@@ -646,6 +646,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   topPlayersContainer: {fileID: 1670573280414407391}
   playersOnlineLabel: {fileID: 7647585714201592157}
+  logoutButton: {fileID: 3705957071752553902}
   playerRowPrefab: {fileID: 842534336048743808, guid: 80a1eb16d610a3849beae73a3fa8ee10, type: 3}
 --- !u!1 &3705957070487179723
 GameObject:

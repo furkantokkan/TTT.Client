@@ -5,15 +5,21 @@ using TMPro;
 using TTT.PacketHandlers;
 using TTT.Server.NetworkShared.Packets.ServerClient;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LobbyManager : MonoBehaviour
 {
     [SerializeField] private Transform topPlayersContainer;
     [SerializeField] private TextMeshProUGUI playersOnlineLabel;
+    [SerializeField] private Button logoutButton;
     [SerializeField] GameObject playerRowPrefab;
     void Start()
     {
+        logoutButton.onClick.AddListener(Logout);
+
         OnServerStatusRequestHandler.OnServerStatus += UpdateUI;
+
         RequestServerStatus();
     }
     private void OnDisable()
@@ -39,7 +45,11 @@ public class LobbyManager : MonoBehaviour
             }
         }
     }
-
+    private void Logout()
+    {
+        NetworkClient.Instance.DisconnectFromServer();
+        SceneManager.LoadScene("00_Login");
+    }
     private void RequestServerStatus()
     {
         var msg = new NetServerStatusRequest();

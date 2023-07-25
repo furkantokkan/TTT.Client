@@ -80,7 +80,7 @@ public class NetworkClient : MonoBehaviour, INetEventListener
         }    
     }
 
-    private void DisconnectFromServer()
+    public void DisconnectFromServer()
     {
         netManager.DisconnectAll();
     }
