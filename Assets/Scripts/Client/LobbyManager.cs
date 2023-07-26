@@ -11,17 +11,23 @@ using UnityEngine.UI;
 public class LobbyManager : MonoBehaviour
 {
     [SerializeField] private Transform topPlayersContainer;
+    [SerializeField] private Transform loadingContainer;
     [SerializeField] private TextMeshProUGUI playersOnlineLabel;
     [SerializeField] private Button logoutButton;
+    [SerializeField] private Button cancelButton;
+    [SerializeField] private Button findOpponentButton;
     [SerializeField] GameObject playerRowPrefab;
     void Start()
     {
         logoutButton.onClick.AddListener(Logout);
+        findOpponentButton.onClick.AddListener(FindOpponent);
+        cancelButton.onClick.AddListener(CancelFindOpponent);
 
         OnServerStatusRequestHandler.OnServerStatus += UpdateUI;
 
         RequestServerStatus();
     }
+
     private void OnDisable()
     {
         OnServerStatusRequestHandler.OnServerStatus -= UpdateUI;
@@ -44,6 +50,16 @@ public class LobbyManager : MonoBehaviour
                 instance.GetComponent<PlayerRowUI>().Initialize(player);
             }
         }
+    }
+    private void FindOpponent()
+    {
+        findOpponentButton.gameObject.SetActive(false);
+        loadingContainer.gameObject.SetActive(true);
+    }
+    private void CancelFindOpponent()
+    {
+        findOpponentButton.gameObject.SetActive(true);
+        loadingContainer.gameObject.SetActive(false);
     }
     private void Logout()
     {

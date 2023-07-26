@@ -459,7 +459,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -25, y: 0}
+  m_AnchoredPosition: {x: -25, y: -0.1371994}
   m_SizeDelta: {x: 80, y: 80}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &7162577801538693377
@@ -555,12 +555,12 @@ GameObject:
   - component: {fileID: 5983177658952522528}
   - component: {fileID: 8572059506501313467}
   m_Layer: 5
-  m_Name: Loading
+  m_Name: LoadingContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5983177658952522528
 RectTransform:
   m_ObjectHideFlags: 0
@@ -967,8 +967,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   topPlayersContainer: {fileID: 1670573280414407391}
+  loadingContainer: {fileID: 5983177658952522528}
   playersOnlineLabel: {fileID: 7647585714201592157}
   logoutButton: {fileID: 3705957071752553902}
+  cancelButton: {fileID: 7849610401990250607}
+  findOpponentButton: {fileID: 3705957070857253741}
   playerRowPrefab: {fileID: 842534336048743808, guid: 80a1eb16d610a3849beae73a3fa8ee10, type: 3}
 --- !u!1 &3705957070487179723
 GameObject:
@@ -1565,7 +1568,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3705957070857253740
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3701,6 +3704,10 @@ PrefabInstance:
     - target: {fileID: 2782472186513769561, guid: 448f7f981db29d14a8790152eb122559, type: 3}
       propertyPath: m_Name
       value: LoadingAnimation
+      objectReference: {fileID: 0}
+    - target: {fileID: 2782472186513769561, guid: 448f7f981db29d14a8790152eb122559, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 448f7f981db29d14a8790152eb122559, type: 3}
