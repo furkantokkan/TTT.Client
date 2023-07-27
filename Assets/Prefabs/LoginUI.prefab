@@ -2713,6 +2713,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LoadingAnimation
       objectReference: {fileID: 0}
+    - target: {fileID: 2782472186513769561, guid: 448f7f981db29d14a8790152eb122559, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 448f7f981db29d14a8790152eb122559, type: 3}
 --- !u!1 &31573652 stripped

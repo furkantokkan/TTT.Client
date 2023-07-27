@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using TTT.PacketHandlers;
+using TTT.Server.NetworkShared.Packets.ClientServer;
 using TTT.Server.NetworkShared.Packets.ServerClient;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -55,11 +56,17 @@ public class LobbyManager : MonoBehaviour
     {
         findOpponentButton.gameObject.SetActive(false);
         loadingContainer.gameObject.SetActive(true);
+
+        NetFindOpponentRequest request = new NetFindOpponentRequest();
+        NetworkClient.Instance.SendServer(request);
     }
     private void CancelFindOpponent()
     {
         findOpponentButton.gameObject.SetActive(true);
         loadingContainer.gameObject.SetActive(false);
+
+        NetCancelFindOpponentRequest request = new NetCancelFindOpponentRequest();
+        NetworkClient.Instance.SendServer(request);
     }
     private void Logout()
     {
