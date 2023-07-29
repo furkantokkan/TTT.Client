@@ -40,7 +40,6 @@ namespace TTT.Server.NetworkShared.Packets.ServerClient
             }
         }
     }
-
     public struct PlayerNetDto : INetSerializable
     {
         public string Username { get; set; }
