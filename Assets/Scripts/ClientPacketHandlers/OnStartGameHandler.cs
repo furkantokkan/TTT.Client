@@ -12,7 +12,7 @@ public class OnStartGameHandler : IPacketHandler
     public void Handle(INetPacket packet, int connectionID)
     {
         var msg = (NetOnStartGame)packet;
-
+        GameManager.instance.RegisterGame(msg.GameId, msg.PlayerData);
         SceneManager.LoadScene("02_Game");
     }
 }

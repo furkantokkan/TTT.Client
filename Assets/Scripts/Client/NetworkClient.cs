@@ -9,10 +9,14 @@ using System.Net.Sockets;
 using System.Text;
 using TTT.Server.NetworkShared;
 using TTT.Server.NetworkShared.Registries;
+using UnityEditor.MemoryProfiler;
 using UnityEngine;
 
 public class NetworkClient : MonoBehaviour, INetEventListener
 {
+    public string username = string.Empty;
+    public int connectionID = -1;
+
     private NetManager netManager;
 
     private NetPeer server;
@@ -144,6 +148,8 @@ public class NetworkClient : MonoBehaviour, INetEventListener
     public void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
     {
         Debug.Log("<color=red>" + "Disconnected from server, casuse is: " + disconnectInfo.Reason.ToString() + "</color>");
+        username = string.Empty;
+        connectionID = -1;
         onServerDisconnected?.Invoke();
     }
     private INetPacket ResolvePacket(PacketType packetType, NetPacketReader reader)
