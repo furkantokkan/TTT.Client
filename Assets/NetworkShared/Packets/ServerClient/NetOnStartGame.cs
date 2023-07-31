@@ -21,7 +21,6 @@ namespace TTT.Server.NetworkShared.Packets.ServerClient
         public void Deserialize(NetDataReader reader)
         {
             PlayersCount = reader.GetUShort();
-            PlayerData = new PlayerData[PlayersCount];
             for (int i = 0; i < PlayersCount; i++)
             {
                 PlayerData[i] = reader.Get<PlayerData>();

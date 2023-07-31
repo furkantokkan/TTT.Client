@@ -546,6 +546,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1936168199}
   - component: {fileID: 1936168200}
+  - component: {fileID: 224396171913936830}
   m_Layer: 5
   m_Name: Board
   m_TagString: Untagged
@@ -597,6 +598,19 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 1
   m_ConstraintCount: 3
+--- !u!114 &224396171913936830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1936168198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dca685f2ace274642ae65a26e056a8f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boardCellPrefab: {fileID: 4585471365362369531, guid: 683b2f023197c094b882a5d203b2a0b6, type: 3}
 --- !u!1 &2117534144
 GameObject:
   m_ObjectHideFlags: 0
@@ -2337,7 +2351,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   xColor: {r: 0.9921569, g: 0.9058824, b: 0, a: 1}
   oColor: {r: 0, g: 0.7607844, b: 0.9960785, a: 1}
-  playerText: {fileID: 0}
+  playerText: {fileID: 2755979649196197431}
 --- !u!1 &7218252636209298402
 GameObject:
   m_ObjectHideFlags: 0
