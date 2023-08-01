@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TTT.Server.NetworkShared.Packets.ServerClient;
 using UnityEngine;
 
 public class BoardUI : MonoBehaviour
@@ -11,6 +13,16 @@ public class BoardUI : MonoBehaviour
     void Start()
     {
         ResetBoard();
+        OnMarkCellHandler.OnMarkCell += UpdateBoard;
+    }
+    private void OnDisable()
+    {
+        OnMarkCellHandler.OnMarkCell -= UpdateBoard;
+    }
+
+    private void UpdateBoard(NetOnMarkCell msg)
+    {
+        cells[msg.Index].UpdateUI(msg.Actor);
     }
 
     private void ResetBoard()

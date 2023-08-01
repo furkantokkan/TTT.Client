@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public GameData activeGame;
+    private GameData activeGame;
 
     public GameData ActiveGame { get { return activeGame; } }
 
@@ -100,5 +100,34 @@ public class GameManager : MonoBehaviour
         public PlayerData[] players { get; set; }
 
         public string CurrentUser { get; set; }
+
+        public void SwitchCurrentPlayer()
+        {
+            CurrentUser = GetOpponent(CurrentUser);
+        }
+
+        public MarkType GetPlayerType(string userID)
+        {
+            if (userID == players[0].Player)
+            {
+                return MarkType.X;
+            }
+            else
+            {
+                return MarkType.O;
+            }
+        }
+
+        private string GetOpponent(string currentUser)
+        {
+            if (currentUser == players[0].Player)
+            {
+                return players[1].Player;
+            }
+            else
+            {
+                return players[0].Player;
+            }
+        }
     }
 }
