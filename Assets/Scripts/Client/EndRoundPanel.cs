@@ -1,0 +1,105 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using TTT.Server.NetworkShared.Packets.ClientServer;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class EndRoundPanel : MonoBehaviour
+{
+    [Header("Attributes")]
+    [SerializeField] Color winColor;
+    [SerializeField] Color looseColor;
+    [SerializeField] Color drawColor;
+    [SerializeField] string winTextValue = "YOU WIN!";
+    [SerializeField] string looseTextValue = "YOU LOST!";
+    [SerializeField] string drawTextValue = "DRAW";
+    [Header("Referances")]
+    [SerializeField] private Transform root;
+    [SerializeField] private Image header;
+    [SerializeField] private Button playAgainButton;
+    [SerializeField] private Button acceptButton;
+    [SerializeField] private Button quitButton;
+    [SerializeField] private TextMeshProUGUI opponentLeftText;
+    [SerializeField] private TextMeshProUGUI waitingForOpponentText;
+    [SerializeField] private TextMeshProUGUI playAgainText;
+    [SerializeField] private TextMeshProUGUI winLooseText;
+
+
+    private float button1MiddlePosY = 7f;
+    private float button2MiddlePosY = -151f;
+
+    private float button1BottomPosY = -77f;
+    private float button2BottomPosY = -237f;
+    private void OnEnable()
+    {
+        LeanTween.cancel(root.gameObject);
+        root.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+        LeanTween.scale(root.gameObject, new Vector3(1.0f, 1.0f, 1.0f), 1f).setEase(LeanTweenType.easeOutBounce);
+
+        playAgainButton.onClick.AddListener(RequestPlayAgain);
+
+        OnPlayAgainHandler.OnPlayAgain += HandlePlayAgainRequest;
+
+        RectTransform rtAcceptButton = acceptButton.GetComponent<RectTransform>();
+        rtAcceptButton.anchoredPosition = new Vector2(rtAcceptButton.anchoredPosition.x, button1MiddlePosY);
+
+        RectTransform rtQuitButton = quitButton.GetComponent<RectTransform>();
+        rtQuitButton.anchoredPosition = new Vector2(rtQuitButton.anchoredPosition.x, button2MiddlePosY);
+    }
+
+    private void OnDisable()
+    {
+        playAgainButton.onClick.RemoveAllListeners();
+        OnPlayAgainHandler.OnPlayAgain -= HandlePlayAgainRequest;
+    }
+
+    public void Initialize(string winnerID, bool isDraw)
+    {
+        if (isDraw)
+        {
+            header.color = drawColor;
+            winLooseText.text = drawTextValue;
+            return;
+        }
+
+        bool isWin = NetworkClient.Instance.username == winnerID;
+
+        if (isWin)
+        {
+            header.color = winColor;
+            winLooseText.text = winTextValue;
+        }
+        else
+        {
+            header.color = looseColor;
+            winLooseText.text = looseTextValue;
+        }
+    }
+    private void HandlePlayAgainRequest()
+    {
+        playAgainButton.gameObject.SetActive(false);
+        acceptButton.gameObject.SetActive(true);
+        playAgainText.gameObject.SetActive(true);
+
+        RectTransform rtAcceptButton = acceptButton.GetComponent<RectTransform>();
+        rtAcceptButton.anchoredPosition = new Vector2(rtAcceptButton.anchoredPosition.x, button1BottomPosY);
+
+        RectTransform rtQuitButton = quitButton.GetComponent<RectTransform>();
+        rtQuitButton.anchoredPosition = new Vector2(rtQuitButton.anchoredPosition.x, button2BottomPosY);
+    }
+    private void RequestPlayAgain()
+    {
+        playAgainButton.gameObject.SetActive(false);
+        waitingForOpponentText.gameObject.SetActive(true);
+
+        RectTransform rtQuitButton = quitButton.GetComponent<RectTransform>();
+        rtQuitButton.anchoredPosition = new Vector2(rtQuitButton.anchoredPosition.x, button2MiddlePosY);
+
+
+        var msg = new NetPlayAgainRequest();
+
+        NetworkClient.Instance.SendServer(msg);
+    }
+}
