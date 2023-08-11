@@ -5,6 +5,7 @@ using TMPro;
 using TTT.Server.NetworkShared.Models;
 using TTT.Server.NetworkShared.Packets.ServerClient;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameUI : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class GameUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI player1Score;
     [SerializeField] private TextMeshProUGUI player2Username;
     [SerializeField] private TextMeshProUGUI player2Score;
+    [SerializeField] private Button surrenderButton;
 
     private int xScore = 0;
     private int oScore = 0;
@@ -22,11 +24,19 @@ public class GameUI : MonoBehaviour
     {
         Initialize();
 
+        surrenderButton.onClick.AddListener(Surrender);
+        OnSurrenderHandler.OnSurrender += HandleSurrender;
         OnMarkCellHandler.OnMarkCell += HandleMarkCell;
+        OnQuitGameHandler.OnQuitGame += HandleOpponentLeft;
     }
+
+
     private void OnDestroy()
     {
+        surrenderButton.onClick.RemoveAllListeners();
+        OnSurrenderHandler.OnSurrender -= HandleSurrender;
         OnMarkCellHandler.OnMarkCell -= HandleMarkCell;
+        OnQuitGameHandler.OnQuitGame -= HandleOpponentLeft;
     }
     public void Initialize()
     {
@@ -35,6 +45,24 @@ public class GameUI : MonoBehaviour
         player2Username.text = "[O] " + game.players[1].Player;
 
     }
+    private void HandleOpponentLeft(NetOnQuitGame msg)
+    {
+        if (!endRoundPanel.gameObject.activeSelf)
+        {
+            endRoundPanel.gameObject.SetActive(true);
+            endRoundPanel.GetComponent<EndRoundPanel>().SetOpponentLeft(msg);
+        }
+    }
+    private void HandleSurrender(NetOnSurrender msg)
+    {
+        DisplayEndRoundUI(msg.Winner, false);
+    }
+    private void Surrender()
+    {
+        var msg = new NetSurrenderRequest();
+        NetworkClient.Instance.SendServer(msg);
+    }
+
     private void HandleMarkCell(NetOnMarkCell msg)
     {
         if (msg.Outcome != MarkOutcome.None)

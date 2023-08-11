@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using TTT.Server.NetworkShared.Packets.ClientServer;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class EndRoundPanel : MonoBehaviour
@@ -32,6 +33,8 @@ public class EndRoundPanel : MonoBehaviour
 
     private float button1BottomPosY = -77f;
     private float button2BottomPosY = -237f;
+    private bool opponentLeft;
+
     private void OnEnable()
     {
         LeanTween.cancel(root.gameObject);
@@ -40,9 +43,11 @@ public class EndRoundPanel : MonoBehaviour
 
         playAgainButton.onClick.AddListener(RequestPlayAgain);
         acceptButton.onClick.AddListener(AcceptPlayAgain);
+        quitButton.onClick.AddListener(QuitFromGame);
 
         OnPlayAgainHandler.OnPlayAgain += HandlePlayAgainRequest;
         OnNewRoundHandler.OnNewRound += ResetUI;
+        OnQuitGameHandler.OnQuitGame += SetOpponentLeft;
 
         RectTransform rtAcceptButton = acceptButton.GetComponent<RectTransform>();
         rtAcceptButton.anchoredPosition = new Vector2(rtAcceptButton.anchoredPosition.x, button1MiddlePosY);
@@ -51,12 +56,13 @@ public class EndRoundPanel : MonoBehaviour
         rtQuitButton.anchoredPosition = new Vector2(rtQuitButton.anchoredPosition.x, button2MiddlePosY);
     }
 
-
     private void OnDisable()
     {
         playAgainButton.onClick.RemoveAllListeners();
+        quitButton.onClick.RemoveAllListeners();
         OnPlayAgainHandler.OnPlayAgain -= HandlePlayAgainRequest;
         OnNewRoundHandler.OnNewRound -= ResetUI;
+        OnQuitGameHandler.OnQuitGame -= SetOpponentLeft;
     }
 
     public void Initialize(string winnerID, bool isDraw)
@@ -80,6 +86,31 @@ public class EndRoundPanel : MonoBehaviour
             header.color = looseColor;
             winLooseText.text = looseTextValue;
         }
+    }
+    public void SetOpponentLeft(NetOnQuitGame game)
+    {
+        opponentLeftText.gameObject.SetActive(true);
+        playAgainButton.gameObject.SetActive(false);
+        waitingForOpponentText.gameObject.SetActive(false);
+        playAgainButton.gameObject.SetActive(false);
+        acceptButton.gameObject.SetActive(false);
+        playAgainText.gameObject.SetActive(false);
+
+        RectTransform rtQuitButton = quitButton.GetComponent<RectTransform>();
+        rtQuitButton.anchoredPosition = new Vector2(rtQuitButton.anchoredPosition.x, button1BottomPosY);
+
+        opponentLeft = true;
+    }
+    private void QuitFromGame()
+    {
+        if (opponentLeft)
+        {
+            SceneManager.LoadScene("01_Lobby");
+            return;
+        }
+        quitButton.interactable = false;
+        var msg = new NetQuitGameRequest();
+        NetworkClient.Instance.SendServer(msg);
     }
     private void ResetUI()
     {
