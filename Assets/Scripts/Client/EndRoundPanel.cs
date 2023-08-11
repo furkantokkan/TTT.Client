@@ -39,8 +39,10 @@ public class EndRoundPanel : MonoBehaviour
         LeanTween.scale(root.gameObject, new Vector3(1.0f, 1.0f, 1.0f), 1f).setEase(LeanTweenType.easeOutBounce);
 
         playAgainButton.onClick.AddListener(RequestPlayAgain);
+        acceptButton.onClick.AddListener(AcceptPlayAgain);
 
         OnPlayAgainHandler.OnPlayAgain += HandlePlayAgainRequest;
+        OnNewRoundHandler.OnNewRound += ResetUI;
 
         RectTransform rtAcceptButton = acceptButton.GetComponent<RectTransform>();
         rtAcceptButton.anchoredPosition = new Vector2(rtAcceptButton.anchoredPosition.x, button1MiddlePosY);
@@ -49,10 +51,12 @@ public class EndRoundPanel : MonoBehaviour
         rtQuitButton.anchoredPosition = new Vector2(rtQuitButton.anchoredPosition.x, button2MiddlePosY);
     }
 
+
     private void OnDisable()
     {
         playAgainButton.onClick.RemoveAllListeners();
         OnPlayAgainHandler.OnPlayAgain -= HandlePlayAgainRequest;
+        OnNewRoundHandler.OnNewRound -= ResetUI;
     }
 
     public void Initialize(string winnerID, bool isDraw)
@@ -76,6 +80,32 @@ public class EndRoundPanel : MonoBehaviour
             header.color = looseColor;
             winLooseText.text = looseTextValue;
         }
+    }
+    private void ResetUI()
+    {
+        playAgainButton.gameObject.SetActive(true);
+        waitingForOpponentText.gameObject.SetActive(false);
+        acceptButton.interactable = true;
+        acceptButton.gameObject.SetActive(false);
+        playAgainText.gameObject.SetActive(false);
+
+        RectTransform rtPlayAgain = playAgainButton.GetComponent<RectTransform>();
+        rtPlayAgain.anchoredPosition = new Vector2(rtPlayAgain.anchoredPosition.x, button1MiddlePosY);
+
+        RectTransform rtAcceptButton = acceptButton.GetComponent<RectTransform>();
+        rtAcceptButton.anchoredPosition = new Vector2(rtAcceptButton.anchoredPosition.x, button1MiddlePosY);
+
+        RectTransform rtQuitButton = quitButton.GetComponent<RectTransform>();
+        rtQuitButton.anchoredPosition = new Vector2(rtQuitButton.anchoredPosition.x, button2MiddlePosY);
+
+        gameObject.SetActive(false);
+    }
+
+    private void AcceptPlayAgain()
+    {
+        acceptButton.interactable = false;
+        var msg = new NetAceptPlayAgainRequest();
+        NetworkClient.Instance.SendServer(msg);
     }
     private void HandlePlayAgainRequest()
     {

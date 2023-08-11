@@ -14,10 +14,12 @@ public class BoardUI : MonoBehaviour
     {
         ResetBoard();
         OnMarkCellHandler.OnMarkCell += UpdateBoard;
+        OnNewRoundHandler.OnNewRound += ResetBoard;
     }
     private void OnDisable()
     {
         OnMarkCellHandler.OnMarkCell -= UpdateBoard;
+        OnNewRoundHandler.OnNewRound -= ResetBoard;
     }
 
     private void UpdateBoard(NetOnMarkCell msg)
@@ -29,8 +31,11 @@ public class BoardUI : MonoBehaviour
     {
         while (transform.childCount > 0)
         {
-            DestroyImmediate(transform.GetChild(0));
+            DestroyImmediate(transform.GetChild(0).gameObject);
+
         }
+
+        cells.Clear();
 
         for (int i = 0; i < 9; i++) 
         {

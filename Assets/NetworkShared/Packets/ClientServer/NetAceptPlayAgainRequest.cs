@@ -1,14 +1,16 @@
-using LiteNetLib.Utils;
+﻿using LiteNetLib.Utils;
 using NetworkShared;
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using TTT.Server.NetworkShared.Packets.ServerClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace TTT.Server.NetworkShared.Packets.ClientServer
 {
-    public class NetPlayAgainRequest : INetPacket
+    public struct NetAceptPlayAgainRequest : INetPacket
     {
-        public PacketType Type => PacketType.PlayAgainRequest;
+        public PacketType Type => PacketType.AcceptPlayAgainRequest;
 
         public void Deserialize(NetDataReader reader)
         {

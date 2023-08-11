@@ -2,7 +2,6 @@ using LiteNetLib.Utils;
 using NetworkShared;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace TTT.Server.NetworkShared.Packets.ClientServer
 {

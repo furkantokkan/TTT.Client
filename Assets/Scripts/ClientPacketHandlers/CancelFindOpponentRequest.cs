@@ -6,14 +6,12 @@ using TTT.Server.NetworkShared.Attributes;
 using TTT.Server.NetworkShared;
 using UnityEngine;
 
-public class CancelFindOpponentRequest : MonoBehaviour
+
+[HandlerRegister(PacketType.CancelFindOpponentRequest)]
+public class CancelFindOpponentRequestHandler : IPacketHandler
 {
-    [HandlerRegister(PacketType.CancelFindOpponentRequest)]
-    public class CancelFindOpponentRequestHandler : IPacketHandler
+    public void Handle(INetPacket packet, int connectionId)
     {
-        public void Handle(INetPacket packet, int connectionId)
-        {
-            Console.WriteLine("Received cancel find opponent request!");
-        }
+        Console.WriteLine("Received cancel find opponent request!");
     }
 }

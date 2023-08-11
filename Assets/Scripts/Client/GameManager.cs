@@ -117,7 +117,10 @@ public class GameManager : MonoBehaviour
                 return MarkType.O;
             }
         }
-
+        public void Reset()
+        {
+            CurrentUser = players[0].Player;
+        }
         private string GetOpponent(string currentUser)
         {
             if (currentUser == players[0].Player)

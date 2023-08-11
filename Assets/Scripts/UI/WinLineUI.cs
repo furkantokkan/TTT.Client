@@ -21,12 +21,21 @@ public class WinLineUI : MonoBehaviour
         lineImage.enabled = false;
         rt = GetComponent<RectTransform>();
         OnMarkCellHandler.OnMarkCell += HandleMarkCell;
+        OnNewRoundHandler.OnNewRound += ResetUI;
         lineConfig = InitLineConfigs();
     }
 
     private void OnDestroy()
     {
         OnMarkCellHandler.OnMarkCell -= HandleMarkCell;
+        OnNewRoundHandler.OnNewRound -= ResetUI;
+    }
+
+    private void ResetUI()
+    {
+        lineImage.enabled = false;
+        lineImage.fillAmount = 0f;
+        SetupLine(lineConfig[WinLineType.ColMid]);
     }
 
     private void HandleMarkCell(NetOnMarkCell msg)
@@ -52,7 +61,7 @@ public class WinLineUI : MonoBehaviour
         }
     }
 
-    private void SetupLine(LineConfig config, string actor)
+    private void SetupLine(LineConfig config, string actor = default)
     {
         Color color = Color.gray;
 
